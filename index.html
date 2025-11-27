@@ -3,46 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>视觉设计师作品集 | Visual Portfolio</title>
+    <title>创意作品集 | Creative Portfolio</title>
     
-    <!-- Tailwind CSS (无需安装，直接引入) -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Manrope:wght@200;400;600&family=Noto+Sans+SC:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&family=Noto+Sans+SC:wght@300;400;700&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- 自定义配置 -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Manrope', 'Noto Sans SC', 'sans-serif'],
-                        serif: ['Cinzel', 'serif'],
+                        sans: ['Inter', 'Noto Sans SC', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
                     },
                     colors: {
-                        'brand-black': '#050505',
-                        'brand-gray': '#1a1a1a',
-                        'brand-white': '#f3f3f3',
-                        'accent': '#d4d4d4'
+                        glass: 'rgba(255, 255, 255, 0.25)',
+                        glassBorder: 'rgba(255, 255, 255, 0.5)',
+                        glassText: 'rgba(30, 30, 30, 0.9)',
                     },
                     animation: {
-                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
-                        'marquee': 'marquee 25s linear infinite',
+                        'blob': 'blob 10s infinite',
+                        'float': 'float 6s ease-in-out infinite',
                     },
                     keyframes: {
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(40px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
                         },
-                        marquee: {
-                            '0%': { transform: 'translateX(0%)' },
-                            '100%': { transform: 'translateX(-100%)' },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
                         }
                     }
                 }
@@ -51,386 +51,324 @@
     </script>
 
     <style>
-        /* 隐藏默认滚动条但保持滚动功能 */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #050505;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
+        /* 动态背景设置 */
         body {
-            background-color: #050505;
-            color: #f3f3f3;
-            cursor: none; /* 隐藏默认光标，使用自定义光标 */
+            background-color: #f0f2f5;
+            color: #1a1a1a;
             overflow-x: hidden;
         }
 
-        /* 噪点纹理叠加，增加质感 */
-        .noise-overlay {
+        .bg-gradient-mesh {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 50;
-            opacity: 0.05;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: #ffffff;
         }
 
-        /* 自定义光标样式 */
-        .cursor-dot,
-        .cursor-outline {
-            position: fixed;
-            top: 0;
-            left: 0;
-            transform: translate(-50%, -50%);
+        /* 彩色光斑 */
+        .shape-blob {
+            position: absolute;
             border-radius: 50%;
-            z-index: 9999;
-            pointer-events: none;
+            filter: blur(80px);
+            opacity: 0.8;
+            animation: blob 15s infinite alternate;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #FF9A9E; animation-delay: 0s; }
+        .blob-2 { top: 20%; right: -10%; width: 400px; height: 400px; background: #FECFEF; animation-delay: 2s; }
+        .blob-3 { bottom: -10%; left: 20%; width: 600px; height: 600px; background: #a18cd1; animation-delay: 4s; }
+        .blob-4 { bottom: 10%; right: 10%; width: 300px; height: 300px; background: #fbc2eb; animation-delay: 6s; }
+
+        /* 玻璃拟态核心样式 */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
         }
 
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background-color: white;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .cursor-outline {
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        .glass-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-color: #fff;
         }
 
-        /* 鼠标悬停链接时的状态 */
-        body.hovering .cursor-outline {
-            width: 80px;
-            height: 80px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-color: transparent;
-            backdrop-filter: blur(2px);
-        }
-
-        /* 图片悬停效果 */
-        .project-card:hover .project-img {
-            transform: scale(1.05);
-            filter: grayscale(0%);
-        }
-        .project-card .project-img {
-            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.5s ease;
-            filter: grayscale(100%); /* 默认黑白，悬停变彩 */
-        }
-
-        /* 观察者动画初始状态 */
+        /* 滚动动画 */
         .reveal {
             opacity: 0;
-            transform: translateY(50px);
-            transition: all 1s cubic-bezier(0.5, 0, 0, 1);
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
         }
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
         }
-
-        /* 文本描边效果 */
-        .text-stroke {
-            -webkit-text-stroke: 1px rgba(255,255,255,0.3);
-            color: transparent;
-            transition: all 0.5s ease;
-        }
-        .text-stroke:hover {
-            -webkit-text-stroke: 0px;
-            color: white;
-        }
+        
+        /* 隐藏滚动条 */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 3px; }
+        ::-webkit-scrollbar-track { background: transparent; }
     </style>
 </head>
-<body class="font-sans antialiased selection:bg-white selection:text-black">
+<body class="antialiased selection:bg-pink-200 selection:text-pink-900">
 
-    <!-- 噪点背景 -->
-    <div class="noise-overlay"></div>
-
-    <!-- 自定义光标 -->
-    <div class="cursor-dot hidden md:block" id="cursor-dot"></div>
-    <div class="cursor-outline hidden md:block" id="cursor-outline"></div>
+    <!-- 动态背景层 -->
+    <div class="bg-gradient-mesh">
+        <div class="shape-blob blob-1"></div>
+        <div class="shape-blob blob-2"></div>
+        <div class="shape-blob blob-3"></div>
+        <div class="shape-blob blob-4"></div>
+    </div>
 
     <!-- 导航栏 -->
-    <header class="fixed top-0 w-full z-40 px-6 py-6 md:px-12 flex justify-between items-center mix-blend-difference text-white">
-        <a href="#" class="text-2xl font-serif font-bold tracking-widest hover-trigger">LIN.DESIGN</a>
-        
-        <nav class="hidden md:flex space-x-12 text-sm tracking-[0.2em] font-light">
-            <a href="#work" class="hover:text-gray-400 transition-colors hover-trigger relative group">
-                作品
-                <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-white transition-all group-hover:w-full"></span>
-            </a>
-            <a href="#about" class="hover:text-gray-400 transition-colors hover-trigger relative group">
-                关于
-                <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-white transition-all group-hover:w-full"></span>
-            </a>
-            <a href="#contact" class="hover:text-gray-400 transition-colors hover-trigger relative group">
-                联系
-                <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-white transition-all group-hover:w-full"></span>
-            </a>
-        </nav>
-
-        <!-- 移动端菜单按钮 (视觉展示) -->
-        <button class="md:hidden hover-trigger">
-            <i data-lucide="menu" class="w-8 h-8"></i>
-        </button>
-    </header>
-
-    <main>
-        <!-- Hero Section -->
-        <section class="min-h-screen flex flex-col justify-center px-6 md:px-12 pt-20 relative">
-            <div class="reveal">
-                <p class="text-sm md:text-base tracking-[0.4em] text-gray-400 mb-4 uppercase">Freelance Visual Designer</p>
-                <h1 class="text-6xl md:text-[9vw] leading-[0.9] font-bold font-serif mix-blend-difference mb-8">
-                    CRAFTING <br>
-                    <span class="ml-12 md:ml-32 italic font-light text-gray-400">Digital</span> <br>
-                    EMOTIONS
-                </h1>
+    <nav class="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
+        <div class="glass-panel px-8 py-4 rounded-full flex items-center gap-8 md:gap-12">
+            <a href="#" class="font-serif font-bold text-xl tracking-tighter text-gray-800">LUMOS.</a>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-gray-600">
+                <a href="#about" class="hover:text-black transition-colors">关于</a>
+                <a href="#work" class="hover:text-black transition-colors">作品</a>
+                <a href="#contact" class="hover:text-black transition-colors">联系</a>
             </div>
+            <a href="#contact" class="md:hidden">
+                <i data-lucide="menu" class="w-5 h-5 text-gray-700"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section id="about" class="min-h-screen flex items-center justify-center px-4 pt-20 pb-10 relative overflow-hidden">
+        <div class="container mx-auto max-w-6xl grid md:grid-cols-2 gap-12 items-center">
             
-            <div class="absolute bottom-12 right-6 md:right-12 flex flex-col items-end reveal delay-200">
-                <p class="max-w-xs text-right text-gray-400 text-sm leading-relaxed mb-6">
-                    专注于品牌识别、UI设计与视觉叙事。<br>
-                    致力于通过极简主义美学传递核心价值。
+            <!-- 左侧：文字 -->
+            <div class="order-2 md:order-1 reveal">
+                <span class="inline-block px-3 py-1 rounded-full bg-white/50 border border-white/60 text-xs font-bold tracking-widest text-purple-900 mb-6 backdrop-blur-sm">
+                    HELLO, WORLD
+                </span>
+                <h1 class="text-5xl md:text-7xl font-serif font-bold text-gray-900 mb-6 leading-tight">
+                    设计 <br> 
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 italic">不仅仅是</span> <br>
+                    视觉体验
+                </h1>
+                <p class="text-lg text-gray-600 mb-8 max-w-md leading-relaxed">
+                    我是 <span class="font-bold text-black">Lin</span>，一名追求极致美学的视觉设计师。我利用色彩、光影与玻璃质感，构建通透而有深度的数字空间。
                 </p>
-                <a href="#work" class="w-16 h-16 rounded-full border border-gray-600 flex items-center justify-center hover:bg-white hover:text-black transition-all duration-300 hover-trigger">
-                    <i data-lucide="arrow-down" class="w-6 h-6 animate-bounce"></i>
-                </a>
+                <div class="flex gap-4">
+                    <a href="#work" class="group relative px-8 py-3 rounded-full overflow-hidden bg-black text-white shadow-lg transition-all hover:shadow-xl hover:-translate-y-1">
+                        <span class="relative z-10 font-medium">查看作品</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </a>
+                    <a href="https://github.com" target="_blank" class="px-3 py-3 rounded-full glass-card flex items-center justify-center text-gray-700 hover:text-black">
+                        <i data-lucide="github" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="px-3 py-3 rounded-full glass-card flex items-center justify-center text-gray-700 hover:text-black">
+                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                    </a>
+                </div>
             </div>
-        </section>
 
-        <!-- 滚动文字带 -->
-        <div class="py-4 border-y border-white/10 overflow-hidden bg-brand-gray/30 backdrop-blur-sm">
-            <div class="whitespace-nowrap animate-marquee flex items-center">
-                <span class="text-4xl md:text-6xl mx-8 font-serif italic text-white/20">VISUAL IDENTITY</span>
-                <span class="text-xl mx-4">✦</span>
-                <span class="text-4xl md:text-6xl mx-8 font-serif italic text-white/20">ART DIRECTION</span>
-                <span class="text-xl mx-4">✦</span>
-                <span class="text-4xl md:text-6xl mx-8 font-serif italic text-white/20">WEB DESIGN</span>
-                <span class="text-xl mx-4">✦</span>
-                <span class="text-4xl md:text-6xl mx-8 font-serif italic text-white/20">TYPOGRAPHY</span>
-                <span class="text-xl mx-4">✦</span>
-                <span class="text-4xl md:text-6xl mx-8 font-serif italic text-white/20">VISUAL IDENTITY</span>
-                <span class="text-xl mx-4">✦</span>
-                <span class="text-4xl md:text-6xl mx-8 font-serif italic text-white/20">ART DIRECTION</span>
-                <span class="text-xl mx-4">✦</span>
+            <!-- 右侧：头像/视觉图 -->
+            <div class="order-1 md:order-2 flex justify-center reveal delay-200">
+                <div class="relative w-72 h-72 md:w-96 md:h-96">
+                    <!-- 装饰光圈 -->
+                    <div class="absolute inset-0 bg-gradient-to-tr from-pink-300 to-purple-300 rounded-full blur-2xl opacity-60 animate-pulse"></div>
+                    
+                    <!-- 头像卡片 -->
+                    <div class="relative w-full h-full rounded-[2rem] glass-panel p-3 rotate-3 hover:rotate-0 transition-transform duration-500 overflow-hidden shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop" 
+                             alt="Designer Portrait" 
+                             class="w-full h-full object-cover rounded-[1.5rem] hover:scale-105 transition-transform duration-700">
+                        
+                        <!-- 悬浮标签 -->
+                        <div class="absolute bottom-6 left-6 right-6 glass-panel rounded-xl p-3 flex items-center gap-3 backdrop-blur-md">
+                            <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                            <span class="text-xs font-bold text-gray-800">Open for work</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 漂浮元素 -->
+                    <div class="absolute -top-8 -right-8 glass-card p-4 rounded-2xl animate-float">
+                        <i data-lucide="palette" class="w-6 h-6 text-pink-500"></i>
+                    </div>
+                    <div class="absolute -bottom-4 -left-8 glass-card p-4 rounded-2xl animate-float" style="animation-delay: 1.5s;">
+                        <i data-lucide="pen-tool" class="w-6 h-6 text-purple-500"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 作品集区域 -->
+    <section id="work" class="py-24 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-2">精选项目</h2>
+                    <p class="text-gray-500">探索色彩与构图的无限可能</p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <button class="px-6 py-2 rounded-full glass-card text-sm font-medium hover:bg-white/60">
+                        查看全部 →
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Card 1 -->
+                <article class="glass-card rounded-3xl p-3 flex flex-col group reveal hover:shadow-2xl">
+                    <div class="relative overflow-hidden rounded-2xl aspect-[4/3] mb-4">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop" 
+                             alt="Project 1" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+                        <div class="absolute top-3 right-3 glass-panel px-3 py-1 rounded-full text-xs font-bold text-white bg-black/20 backdrop-blur-md">
+                            UI Design
+                        </div>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <h3 class="text-2xl font-serif font-bold text-gray-900 mb-1 group-hover:text-purple-700 transition-colors">Prism OS</h3>
+                        <p class="text-sm text-gray-500 mb-4 line-clamp-2">重新定义操作系统的视觉语言，使用全息投影概念设计的用户界面。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 rounded-md bg-white/40 text-gray-600">Figma</span>
+                            <span class="text-xs px-2 py-1 rounded-md bg-white/40 text-gray-600">3D</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="glass-card rounded-3xl p-3 flex flex-col group reveal delay-100 hover:shadow-2xl">
+                    <div class="relative overflow-hidden rounded-2xl aspect-[4/3] mb-4">
+                        <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000&auto=format&fit=crop" 
+                             alt="Project 2" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute top-3 right-3 glass-panel px-3 py-1 rounded-full text-xs font-bold text-white bg-black/20 backdrop-blur-md">
+                            Branding
+                        </div>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <h3 class="text-2xl font-serif font-bold text-gray-900 mb-1 group-hover:text-purple-700 transition-colors">Neo Soda</h3>
+                        <p class="text-sm text-gray-500 mb-4 line-clamp-2">为Z世代打造的气泡水品牌，采用了大胆的波普艺术风格与高饱和配色。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 rounded-md bg-white/40 text-gray-600">Illustrator</span>
+                            <span class="text-xs px-2 py-1 rounded-md bg-white/40 text-gray-600">Packaging</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="glass-card rounded-3xl p-3 flex flex-col group reveal delay-200 hover:shadow-2xl">
+                    <div class="relative overflow-hidden rounded-2xl aspect-[4/3] mb-4">
+                        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=1000&auto=format&fit=crop" 
+                             alt="Project 3" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute top-3 right-3 glass-panel px-3 py-1 rounded-full text-xs font-bold text-white bg-black/20 backdrop-blur-md">
+                            Web
+                        </div>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <h3 class="text-2xl font-serif font-bold text-gray-900 mb-1 group-hover:text-purple-700 transition-colors">Vogue Tech</h3>
+                        <p class="text-sm text-gray-500 mb-4 line-clamp-2">时尚科技杂志的登录页面，融合了衬线体排版与现代交互动效。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 rounded-md bg-white/40 text-gray-600">Webflow</span>
+                            <span class="text-xs px-2 py-1 rounded-md bg-white/40 text-gray-600">GSAP</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Card 4 (Span 2 cols on tablet) -->
+                <article class="glass-card rounded-3xl p-3 flex flex-col md:col-span-2 lg:col-span-1 group reveal delay-100 hover:shadow-2xl">
+                    <div class="relative overflow-hidden rounded-2xl aspect-[4/3] mb-4">
+                        <img src="https://images.unsplash.com/photo-1549490349-8643362247b5?q=80&w=1000&auto=format&fit=crop" 
+                             alt="Project 4" 
+                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute top-3 right-3 glass-panel px-3 py-1 rounded-full text-xs font-bold text-white bg-black/20 backdrop-blur-md">
+                            Illustration
+                        </div>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <h3 class="text-2xl font-serif font-bold text-gray-900 mb-1 group-hover:text-purple-700 transition-colors">Flora Dreams</h3>
+                        <p class="text-sm text-gray-500 mb-4 line-clamp-2">一系列关于超现实植物的数字插画，探索自然与梦境的边界。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-xs px-2 py-1 rounded-md bg-white/40 text-gray-600">Procreate</span>
+                            <span class="text-xs px-2 py-1 rounded-md bg-white/40 text-gray-600">Art</span>
+                        </div>
+                    </div>
+                </article>
+
             </div>
         </div>
+    </section>
 
-        <!-- 作品集区域 -->
-        <section id="work" class="px-4 py-24 md:px-12">
-            <div class="flex justify-between items-end mb-16 reveal">
-                <h2 class="text-4xl md:text-6xl font-serif">精选作品</h2>
-                <span class="text-sm tracking-widest text-gray-500 hidden md:block">SELECTED WORKS (2023-2025)</span>
+    <!-- 技能/服务 -->
+    <section class="py-12 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <div class="glass-panel rounded-[2.5rem] p-8 md:p-12 text-center relative overflow-hidden reveal">
+                <!-- 装饰背景 -->
+                <div class="absolute -top-20 -left-20 w-64 h-64 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+                <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+
+                <h2 class="text-3xl font-serif font-bold mb-8 relative z-10">我的技能栈</h2>
+                <div class="flex flex-wrap justify-center gap-4 relative z-10">
+                    <span class="px-6 py-3 rounded-full bg-white/60 border border-white hover:bg-white hover:scale-105 transition-all cursor-default shadow-sm text-sm font-medium">✨ UI/UX Design</span>
+                    <span class="px-6 py-3 rounded-full bg-white/60 border border-white hover:bg-white hover:scale-105 transition-all cursor-default shadow-sm text-sm font-medium">🎨 Brand Identity</span>
+                    <span class="px-6 py-3 rounded-full bg-white/60 border border-white hover:bg-white hover:scale-105 transition-all cursor-default shadow-sm text-sm font-medium">🖌️ Illustration</span>
+                    <span class="px-6 py-3 rounded-full bg-white/60 border border-white hover:bg-white hover:scale-105 transition-all cursor-default shadow-sm text-sm font-medium">💻 Frontend Dev</span>
+                    <span class="px-6 py-3 rounded-full bg-white/60 border border-white hover:bg-white hover:scale-105 transition-all cursor-default shadow-sm text-sm font-medium">🧊 3D Modeling</span>
+                    <span class="px-6 py-3 rounded-full bg-white/60 border border-white hover:bg-white hover:scale-105 transition-all cursor-default shadow-sm text-sm font-medium">📸 Photography</span>
+                </div>
             </div>
+        </div>
+    </section>
 
-            <!-- 网格布局 -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-y-24 md:gap-x-12">
-                
-                <!-- Project 1 -->
-                <article class="group project-card cursor-none reveal">
-                    <a href="#" class="block hover-trigger">
-                        <div class="overflow-hidden mb-6 relative aspect-[4/5] md:aspect-[4/3]">
-                            <!-- 占位图 -->
-                            <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=2000&auto=format&fit=crop" 
-                                 alt="Project 1" 
-                                 class="project-img w-full h-full object-cover">
-                            <!-- 遮罩层 -->
-                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all"></div>
-                        </div>
-                        <div class="flex justify-between items-start border-t border-white/20 pt-4">
-                            <div>
-                                <h3 class="text-2xl md:text-3xl font-light mb-1 group-hover:italic transition-all">Aura</h3>
-                                <p class="text-sm text-gray-500">Brand Identity / Packaging</p>
-                            </div>
-                            <span class="text-sm border border-white/30 px-3 py-1 rounded-full group-hover:bg-white group-hover:text-black transition-all">2024</span>
-                        </div>
-                    </a>
-                </article>
-
-                <!-- Project 2 (Offset Layout) -->
-                <article class="group project-card cursor-none md:mt-24 reveal delay-100">
-                    <a href="#" class="block hover-trigger">
-                        <div class="overflow-hidden mb-6 relative aspect-[4/5] md:aspect-[4/3]">
-                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop" 
-                                 alt="Project 2" 
-                                 class="project-img w-full h-full object-cover">
-                        </div>
-                        <div class="flex justify-between items-start border-t border-white/20 pt-4">
-                            <div>
-                                <h3 class="text-2xl md:text-3xl font-light mb-1 group-hover:italic transition-all">Neon Future</h3>
-                                <p class="text-sm text-gray-500">Editorial Design</p>
-                            </div>
-                            <span class="text-sm border border-white/30 px-3 py-1 rounded-full group-hover:bg-white group-hover:text-black transition-all">2023</span>
-                        </div>
-                    </a>
-                </article>
-
-                <!-- Project 3 -->
-                <article class="group project-card cursor-none reveal">
-                    <a href="#" class="block hover-trigger">
-                        <div class="overflow-hidden mb-6 relative aspect-[4/5] md:aspect-[4/3]">
-                            <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=2000&auto=format&fit=crop" 
-                                 alt="Project 3" 
-                                 class="project-img w-full h-full object-cover">
-                        </div>
-                        <div class="flex justify-between items-start border-t border-white/20 pt-4">
-                            <div>
-                                <h3 class="text-2xl md:text-3xl font-light mb-1 group-hover:italic transition-all">Monolith</h3>
-                                <p class="text-sm text-gray-500">Web Design / UI</p>
-                            </div>
-                            <span class="text-sm border border-white/30 px-3 py-1 rounded-full group-hover:bg-white group-hover:text-black transition-all">2023</span>
-                        </div>
-                    </a>
-                </article>
-
-                <!-- Project 4 -->
-                <article class="group project-card cursor-none md:mt-24 reveal delay-100">
-                    <a href="#" class="block hover-trigger">
-                        <div class="overflow-hidden mb-6 relative aspect-[4/5] md:aspect-[4/3]">
-                            <img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=2000&auto=format&fit=crop" 
-                                 alt="Project 4" 
-                                 class="project-img w-full h-full object-cover">
-                        </div>
-                        <div class="flex justify-between items-start border-t border-white/20 pt-4">
-                            <div>
-                                <h3 class="text-2xl md:text-3xl font-light mb-1 group-hover:italic transition-all">Ethereal</h3>
-                                <p class="text-sm text-gray-500">3D Art / Motion</p>
-                            </div>
-                            <span class="text-sm border border-white/30 px-3 py-1 rounded-full group-hover:bg-white group-hover:text-black transition-all">2024</span>
-                        </div>
-                    </a>
-                </article>
-
-            </div>
+    <!-- 联系页脚 -->
+    <section id="contact" class="py-24 px-4 relative">
+        <div class="container mx-auto max-w-3xl text-center reveal">
+            <h2 class="text-5xl md:text-7xl font-serif font-bold text-gray-900 mb-8">Let's Create Magic.</h2>
+            <p class="text-xl text-gray-600 mb-12">有有趣的项目想法？或者只是想聊聊设计？<br>发封邮件给我，让我们开始吧。</p>
             
-            <div class="mt-24 text-center">
-                <a href="#" class="inline-block border-b border-white pb-1 text-lg hover:text-gray-400 hover:border-gray-400 transition-all hover-trigger">查看更多作品 (Behance)</a>
-            </div>
-        </section>
+            <a href="mailto:hello@lin.design" class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gray-900 text-white font-medium text-lg hover:bg-purple-600 transition-colors shadow-xl hover:shadow-2xl hover:-translate-y-1">
+                <i data-lucide="mail" class="w-5 h-5"></i>
+                hello@lin.design
+            </a>
 
-        <!-- 服务/技能区域 -->
-        <section class="py-24 border-t border-white/10">
-            <div class="container mx-auto px-6 md:px-12">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    <div class="reveal">
-                        <h3 class="text-sm font-bold tracking-widest text-gray-500 mb-6 uppercase">Services</h3>
-                        <ul class="space-y-4 text-xl md:text-2xl font-serif">
-                            <li>Brand Identity</li>
-                            <li>Art Direction</li>
-                            <li>Web Design</li>
-                            <li>Packaging</li>
-                        </ul>
-                    </div>
-                    <div class="reveal delay-100">
-                        <h3 class="text-sm font-bold tracking-widest text-gray-500 mb-6 uppercase">Clients</h3>
-                        <p class="text-gray-300 leading-loose">
-                            Google, Nike, Vogue, Museum of Modern Art, Local Studios, Tech Startups.
-                        </p>
-                    </div>
-                    <div class="reveal delay-200">
-                        <h3 class="text-sm font-bold tracking-widest text-gray-500 mb-6 uppercase">Philosophy</h3>
-                        <p class="text-gray-300 text-lg leading-relaxed">
-                            设计不仅仅是让事物看起来美观，而是通过视觉语言构建秩序与情感的连接。我相信少即是多，在混乱中寻找清晰的表达。
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 关于/页脚区域 -->
-        <section id="contact" class="min-h-[80vh] flex flex-col justify-between px-6 md:px-12 pt-24 pb-12 bg-white text-black relative">
-            <div class="reveal">
-                <p class="text-sm font-bold tracking-widest uppercase mb-4">Let's Talk</p>
-                <a href="mailto:hello@example.com" class="text-5xl md:text-8xl font-serif font-bold hover:text-gray-600 transition-colors block mb-4 hover-trigger">
-                    hello@lin.design
-                </a>
-                <p class="text-xl md:text-2xl text-gray-600 max-w-2xl mt-8">
-                    目前开放接受新项目委托。如果你有一个想法想要实现，或者只是想打个招呼，请随时联系。
-                </p>
-            </div>
-
-            <footer class="flex flex-col md:flex-row justify-between items-end border-t border-black/10 pt-8 mt-12">
-                <div class="mb-6 md:mb-0">
-                    <h2 class="text-2xl font-bold font-serif">LIN.DESIGN</h2>
-                    <p class="text-sm text-gray-500 mt-2">&copy; 2025 All Rights Reserved.</p>
-                </div>
-                
-                <div class="flex space-x-8 text-sm font-bold tracking-widest uppercase">
-                    <a href="#" class="hover-trigger relative group">
-                        Instagram
-                        <span class="absolute -bottom-1 left-0 w-0 h-[1px] bg-black transition-all group-hover:w-full"></span>
-                    </a>
-                    <a href="#" class="hover-trigger relative group">
-                        Behance
-                        <span class="absolute -bottom-1 left-0 w-0 h-[1px] bg-black transition-all group-hover:w-full"></span>
-                    </a>
-                    <a href="#" class="hover-trigger relative group">
-                        LinkedIn
-                        <span class="absolute -bottom-1 left-0 w-0 h-[1px] bg-black transition-all group-hover:w-full"></span>
-                    </a>
+            <footer class="mt-24 pt-8 border-t border-gray-200/50 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 gap-4">
+                <p>&copy; 2025 Lin Design. Built with Passion & Glass.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-purple-600 transition-colors">Instagram</a>
+                    <a href="#" class="hover:text-purple-600 transition-colors">Dribbble</a>
+                    <a href="#" class="hover:text-purple-600 transition-colors">LinkedIn</a>
                 </div>
             </footer>
-        </section>
-    </main>
+        </div>
+    </section>
 
-    <!-- 脚本逻辑 -->
     <script>
-        // 初始化 Icons
+        // 初始化图标
         lucide.createIcons();
 
-        // 自定义光标逻辑
-        const cursorDot = document.getElementById('cursor-dot');
-        const cursorOutline = document.getElementById('cursor-outline');
-        
-        // 仅在非触摸设备上启用光标跟随
-        if (window.matchMedia("(pointer: fine)").matches) {
-            window.addEventListener('mousemove', (e) => {
-                const posX = e.clientX;
-                const posY = e.clientY;
-
-                // Dot 直接跟随
-                cursorDot.style.left = `${posX}px`;
-                cursorDot.style.top = `${posY}px`;
-
-                // Outline 稍有延迟，制造平滑感
-                cursorOutline.animate({
-                    left: `${posX}px`,
-                    top: `${posY}px`
-                }, { duration: 500, fill: "forwards" });
-            });
-
-            // 悬停交互效果
-            const hoverTriggers = document.querySelectorAll('.hover-trigger');
-            hoverTriggers.forEach(trigger => {
-                trigger.addEventListener('mouseenter', () => {
-                    document.body.classList.add('hovering');
-                });
-                trigger.addEventListener('mouseleave', () => {
-                    document.body.classList.remove('hovering');
-                });
-            });
-        }
-
-        // 滚动显示动画 (Intersection Observer)
+        // 滚动显示动画
         const observerOptions = {
             root: null,
             rootMargin: '0px',
             threshold: 0.1
         };
 
-        const observer = new IntersectionObserver((entries, observer) => {
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
